@@ -1,0 +1,74 @@
+﻿<div class="container">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="Navigationbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        @Html.ActionLink("Exchange", "Index", "Index", new { area = "" }, new { @class = "navbar-brand" })
+    </div>
+    <div class="collapse navbar-collapse" id="Navigationbar">
+        @if (Request.IsAuthenticated)
+        {
+            <ul class="nav navbar-nav">
+                <li>
+                    <a class="btn btn-lg" href="#">Home</a>
+                </li>
+            </ul>
+            using (Ajax.BeginForm("LogOff", "Index", new AjaxOptions()
+            {
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "Navigationbar"
+            }, new { id = "logoutForm", @class = "navbar-right" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <ul class="nav navbar-nav navbar-right">                       
+                    <li>
+                        @Html.ActionLink("Hello " + Session["FullName"]  @*Model.FullNameUser*@ + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                    </li>
+                    <li>
+                        <a class="btn btn-lg" href="javascript:changePage('@Url.Action("Currencies", "Wallet")')"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
+                    </li>
+                    <li>
+                        <a class="btn btn-lg" href="javascript:submitFunc('@Url.Action("LogOff", "Index")', 'logoutForm', '@TokenLogOffValue()')"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a>
+                    </li>
+                </ul>
+            }
+        }
+        else
+        {
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a class="btn btn-lg" href="javascript:changePage('@Url.Action("Login", "Index")')"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span></a>
+                </li>
+            </ul>
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+    function stopRefresh() {
+        if (typeof (refresh) != "undefined") {
+            clearTimeout(refresh);
+        }
+    }
+    function changePage(url, isStopRefresh = true, targetId ='undefined') {
+        (isStopRefresh) ? stopRefresh() : null;        
+        (function () { require('./home/home').changePage(url, targetId); })();
+    }
+    function submitFunc(url, form, antiToken) {
+        stopRefresh();
+        (function () { require('./home/home').submitFunc(url, form, antiToken); })();
+    }
+    @functions{
+        public string TokenLogOffValue()
+        {
+            string cookieToken, formToken;
+            AntiForgery.GetTokens(null, out cookieToken, out formToken);
+            return cookieToken + ":" + formToken;
+        }
+    }
+</script>
+

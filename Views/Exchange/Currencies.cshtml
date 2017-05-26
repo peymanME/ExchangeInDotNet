@@ -1,0 +1,47 @@
+@using Exchange.Models.Entities.Virtual
+@model CurrenciesPrice
+
+
+<section id="ExchangeSection">
+@*<?php
+
+
+if (is_null($exchangeViewModel->getErrorMessage())){
+?>*@    
+    <table class="table table-hover">
+        <head>
+            Currencies
+        </head>
+        <thead>
+             <th>Currency</th>
+             <th>Unit</th>
+             <th>Value</th>
+             <th>Actions</th>
+         </thead>
+        @foreach (var item in Model.Items){
+        <tr>
+            <td>
+                @item.name
+            </td>
+            <td>
+                @item.unit
+            </td>
+            <td>
+                @(item.unit * item.purchasePrice)
+            </td>
+            <td>
+                <input type="button" onclick="wantToBuy('@item.code')" value="Buy" class="btn btn-default" />
+            </td>
+            </tr>
+        }
+    </table>
+         <div>Last updated date = @Model.publicationDate </div>
+         
+@*<?php } else { 
+    //if (!is_null($exchangeViewModel->getErrorMessage())){
+echo $this->partial("error/_information.phtml", array('message' => $exchangeViewModel->getErrorMessage()));}?>*@
+    
+</section>
+
+
+

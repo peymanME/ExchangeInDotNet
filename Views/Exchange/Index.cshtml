@@ -1,0 +1,29 @@
+@using Exchange.Models.ViewModels
+@model ExchangeViewModel
+
+<div class="container">
+    <div class="row">
+        <section id="access">
+            <div class="col-lg-12"> 
+                <div class="col-md-6 table-responsive">
+                    @Html.Partial("~/Views/Exchange/Currencies.cshtml", Model.currenciesPrice)                          
+                </div>
+                <div class="col-md-6 table-responsive">
+                    @Html.Partial("~/Views/Exchange/MyCurrencies.cshtml", Model.currenciesPrice)
+                </div>
+            </div>
+        </section><!-- content -->
+    </div>
+</div>
+<script type="text/javascript">
+    changePage('@Url.Action("Menu","Index")', false, 'Banner');
+    var refresh = setTimeout(function () { require('./home/home').changePage('@Url.Action("Index","Exchange")','mainContent');}, 10000);
+    //function wantToBuy(code) {
+    //    clearTimeout(refresh);
+    //   (function (){require('./home/home').wantToBuy('/*<?= $this->url('wallet', array('action'=>'buy')); ?>/*/'+ code);})();
+    //}
+    //function wantToSell(code) {
+    //    clearTimeout(refresh);
+    //   (function (){require('./home/home').wantToBuy('/*<?= $this->url('wallet', array('action'=>'sell')); ?>/*/'+ code);})();
+    //}
+</script>

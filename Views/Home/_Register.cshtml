@@ -1,0 +1,59 @@
+﻿@using Exchange.Models.ViewModels
+@model AuthViewModel
+@{
+    ViewBag.Title = "Register Page";
+}
+
+<div class="panel panel-default text-center authentication">
+    <div class="panel-heading">
+        <h3 class="panel-title">Register</h3>
+    </div>
+    <div class="panel-body">
+        <section id="registerFormSection">
+            @using (Ajax.BeginForm("Register", "Index", "", new AjaxOptions()
+            {
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "registerFormSection"
+            }, new { @class = "form-horizontal", role = "form", id= "registerForm" }))
+            {
+                @Html.AntiForgeryToken()
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.FirstName , new { @class = "form-control", placeholder = "First name" })
+                @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.LastName , new { @class = "form-control", placeholder = "Last Name" })
+                @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+            </div>
+             <div class="form-group">
+                 @Html.TextBoxFor(m => m.Email , new { @class = "form-control", placeholder = "Email" })
+                 @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.PasswordFor(m => m.RetypePassword, new { @class = "form-control", placeholder = "Retype Password" })
+                @Html.ValidationMessageFor(m => m.RetypePassword, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <input type="button" onclick="(function() { require('./home/home').submitRegisterForm('@Url.Action("Register","Index")', '@TokenHeaderValue()') })()" value="Register" class="btn btn-primary" />
+                &nbsp;&nbsp;<a onclick="(function(){require('./home/home').registerForm('@Url.Action("Login", "Index")')})()" href="#">Login</a>
+            </div>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            }
+        </section><!-- content -->
+    </div>
+</div>
+
+<script>
+    @functions{
+        public string TokenHeaderValue()
+        {
+            string cookieToken, formToken;
+            AntiForgery.GetTokens(null, out cookieToken, out formToken);
+            return cookieToken + ":" + formToken;
+        }
+    }
+</script>
